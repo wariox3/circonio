@@ -19,3 +19,8 @@ export interface UpdateImageResponse {
   cargar: boolean;
   imagen: string;
 }
+
+export interface RemoveImageResponse {
+  limpiar: boolean;
+  imagen: string;
+}

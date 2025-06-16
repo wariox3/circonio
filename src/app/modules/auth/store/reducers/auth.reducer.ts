@@ -3,6 +3,9 @@ import { getCookie } from 'typescript-cookie';
 import { Usuario } from '../../interfaces/usuario.interface';
 import { loginRequest, loginSuccess, loginFailure, logout } from '../actions/login.action';
 import {
+  removeImageFailure,
+  removeImageRequest,
+  removeImageSuccess,
   updateFailure,
   updateImageFailure,
   updateImageRequest,
@@ -115,6 +118,30 @@ export const authReducer = createReducer(
 
   // Manejar el error del perfil
   on(updateImageFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+    isAuthenticated: false,
+  })),
+
+  // Manejar la acción de solicitud de perfil
+  on(removeImageRequest, state => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  // Manejar el éxito del perfil
+  on(removeImageSuccess, (state, { response }) => ({
+    ...state,
+    user: { ...state.user, imagen: response.imagen },
+    loading: false,
+    error: null,
+    isAuthenticated: true,
+  })),
+
+  // Manejar el error del perfil
+  on(removeImageFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,

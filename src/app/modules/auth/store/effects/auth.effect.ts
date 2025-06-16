@@ -10,6 +10,9 @@ import { LOCALSTORAGE_KEYS } from '@app/core/constants/localstorage-keys.constan
 import { environment } from '@environments/environment';
 import { AlertaService } from '@app/common/services/alerta.service';
 import {
+  removeImageFailure,
+  removeImageRequest,
+  removeImageSuccess,
   updateFailure,
   updateImageFailure,
   updateImageRequest,
@@ -160,6 +163,42 @@ export class AuthEffects {
           );
 
           this.alertaService.mostrarExito('Imagen actualizada exitosamente', 'Imagen');
+        })
+      ),
+    { dispatch: false }
+  );
+
+  removeImagePerfil$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(removeImageRequest),
+      switchMap(({ usuario_id }) =>
+        this.authRepository.eliminarImagenPerfil(usuario_id).pipe(
+          map(response =>
+            removeImageSuccess({
+              response: response,
+            })
+          ),
+          catchError(error => of(removeImageFailure({ error })))
+        )
+      )
+    )
+  );
+
+  removeImagePerfilSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(removeImageSuccess),
+        tap(({ response }) => {
+          const cookieOptions = this.cookieService.getAuthCookieOptions(environment.cookieTime);
+          const usuarioCookie = this.cookieService.get(LOCALSTORAGE_KEYS.USER);
+
+          this.cookieService.set(
+            LOCALSTORAGE_KEYS.USER,
+            JSON.stringify({ ...JSON.parse(usuarioCookie), imagen: response.imagen }),
+            cookieOptions
+          );
+
+          this.alertaService.mostrarExito('Imagen eliminada exitosamente', 'Imagen');
         })
       ),
     { dispatch: false }

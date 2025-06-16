@@ -3,7 +3,10 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@ang
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalStandardComponent } from '@app/common/components/ui/modals/modal-standard/modal-standard.component';
 import { ModalService } from '@app/common/services/modal.service';
-import { updateImageRequest } from '@app/modules/auth/store/actions/perfil.action';
+import {
+  removeImageRequest,
+  updateImageRequest,
+} from '@app/modules/auth/store/actions/perfil.action';
 import { selectCurrentUser } from '@app/modules/auth/store/selectors/auth.selector';
 import { Store } from '@ngrx/store';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
@@ -137,5 +140,13 @@ export default class ProfileComponent implements OnInit {
 
       this.cancelImageChange();
     }
+  }
+
+  eliminarImagenPerfil(): void {
+    this.store.dispatch(
+      removeImageRequest({
+        usuario_id: this.currentUser().id,
+      })
+    );
   }
 }
