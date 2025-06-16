@@ -14,3 +14,8 @@ export interface UpdateResponse {
   actualizacion: boolean;
   usuario: UsuarioUpdate;
 }
+
+export interface UpdateImageResponse {
+  cargar: boolean;
+  imagen: string;
+}

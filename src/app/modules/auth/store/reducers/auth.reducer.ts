@@ -2,7 +2,14 @@ import { createReducer, on } from '@ngrx/store';
 import { getCookie } from 'typescript-cookie';
 import { Usuario } from '../../interfaces/usuario.interface';
 import { loginRequest, loginSuccess, loginFailure, logout } from '../actions/login.action';
-import { updateFailure, updateRequest, updateSuccess } from '../actions/perfil.action';
+import {
+  updateFailure,
+  updateImageFailure,
+  updateImageRequest,
+  updateImageSuccess,
+  updateRequest,
+  updateSuccess,
+} from '../actions/perfil.action';
 import { LOCALSTORAGE_KEYS } from '@app/core/constants/localstorage-keys.constant';
 
 // Definir la interfaz del estado de autenticación
@@ -84,6 +91,30 @@ export const authReducer = createReducer(
 
   // Manejar el error del perfil
   on(updateFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+    isAuthenticated: false,
+  })),
+
+  // Manejar la acción de solicitud de perfil
+  on(updateImageRequest, state => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  // Manejar el éxito del perfil
+  on(updateImageSuccess, (state, { response }) => ({
+    ...state,
+    user: { ...state.user, imagen: response.imagen },
+    loading: false,
+    error: null,
+    isAuthenticated: true,
+  })),
+
+  // Manejar el error del perfil
+  on(updateImageFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,

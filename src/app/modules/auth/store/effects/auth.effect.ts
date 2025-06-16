@@ -9,7 +9,14 @@ import { loginFailure, loginRequest, loginSuccess, logout } from '../actions/log
 import { LOCALSTORAGE_KEYS } from '@app/core/constants/localstorage-keys.constant';
 import { environment } from '@environments/environment';
 import { AlertaService } from '@app/common/services/alerta.service';
-import { updateFailure, updateRequest, updateSuccess } from '../actions/perfil.action';
+import {
+  updateFailure,
+  updateImageFailure,
+  updateImageRequest,
+  updateImageSuccess,
+  updateRequest,
+  updateSuccess,
+} from '../actions/perfil.action';
 import { ModalService } from '@app/common/services/modal.service';
 
 @Injectable()
@@ -116,7 +123,43 @@ export class AuthEffects {
           );
 
           this.modalService.close('editar-perfil');
-          this.alertaService.mostrarExito('Perfil actualizado exitosamente', 'Bienvenido');
+          this.alertaService.mostrarExito('Perfil actualizado exitosamente', 'Perfil');
+        })
+      ),
+    { dispatch: false }
+  );
+
+  updateImagePerfil$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateImageRequest),
+      switchMap(({ perfil }) =>
+        this.authRepository.updateImagenPerfil(perfil.usuario_id, perfil.imagen).pipe(
+          map(response =>
+            updateImageSuccess({
+              response: response,
+            })
+          ),
+          catchError(error => of(updateImageFailure({ error })))
+        )
+      )
+    )
+  );
+
+  updateImagePerfilSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(updateImageSuccess),
+        tap(({ response }) => {
+          const cookieOptions = this.cookieService.getAuthCookieOptions(environment.cookieTime);
+          const usuarioCookie = this.cookieService.get(LOCALSTORAGE_KEYS.USER);
+
+          this.cookieService.set(
+            LOCALSTORAGE_KEYS.USER,
+            JSON.stringify({ ...JSON.parse(usuarioCookie), imagen: response.imagen }),
+            cookieOptions
+          );
+
+          this.alertaService.mostrarExito('Imagen actualizada exitosamente', 'Imagen');
         })
       ),
     { dispatch: false }

@@ -42,39 +42,24 @@ export class AuthRepository {
     });
   }
 
-  // cargarImagen(usuario_id: Number | string, imagenB64: string) {
-  //   return this.http.post<{
-  //     cargar: boolean;
-  //     imagen: string;
-  //   }>(`${environment.url_api}/seguridad/usuario/cargar-imagen/`, {
-  //     usuario_id,
-  //     imagenB64,
-  //   });
-  // }
+  updateImagenPerfil(usuario_id: string, base64: string) {
+    return this.httpBase.post<{
+      cargar: boolean;
+      imagen: string;
+    }>(`seguridad/usuario/cargar-imagen/`, {
+      usuario_id,
+      imagenB64: base64,
+    });
+  }
 
-  // eliminarImagen(usuario_id: Number | string) {
-  //   return this.http.post<{
-  //     limpiar: boolean;
-  //     imagen: string;
-  //   }>(`${environment.url_api}/seguridad/usuario/limpiar-imagen/`, {
-  //     usuario_id,
-  //   });
-  // }
-
-  // actualizarInformacion(data: enviarDatosUsuario) {
-  //   return this.http.put<UsuarioInformacionPerfil>(
-  //     `${environment.url_api}/seguridad/usuario/${data.id}/`,
-  //     {
-  //       nombre: data.nombre,
-  //       apellido: data.apellido,
-  //       nombre_corto: data.nombreCorto,
-  //       telefono: data.telefono,
-  //       idioma: data.idioma,
-  //       cargo: data.cargo,
-  //       numero_identificacion: data.numero_identificacion,
-  //     },
-  //   );
-  // }
+  eliminarImagenPerfil(usuario_id: string) {
+    return this.httpBase.post<{
+      limpiar: boolean;
+      imagen: string;
+    }>(`seguridad/usuario/limpiar-imagen/`, {
+      usuario_id,
+    });
+  }
 
   // perfil(codigoUsuario: number) {
   //   return this.http.get<UsuarioInformacionPerfil>(

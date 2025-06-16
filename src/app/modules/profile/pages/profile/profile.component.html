@@ -14,11 +14,34 @@
     <div class="flex flex-wrap sm:flex-nowrap">
       <div class="mr-12 mb-4">
         <div class="relative w-[100px] lg:w-[160px] h-[100px] lg:h-[160px]">
-          <!-- <app-cargar-imagen
-            [recibirImagen]="getUserImageUrl() | async"
-            (dataFormulario)="recuperarBase64($event)"
-            (eliminarLogo)="eliminarImagen($event)"
-          ></app-cargar-imagen> -->
+          <div class="w-full h-full overflow-hidden rounded-full border-2 border-gray-200">
+            <img
+              *ngIf="profileImage() && !isChangingImage"
+              [src]="getProfileImageUrl()"
+              alt="Profile Image"
+              class="w-full h-full object-cover"
+            />
+            <div
+              *ngIf="!profileImage && !isChangingImage"
+              class="w-full h-full bg-gray-200 flex items-center justify-center"
+            >
+              <i class="ki-duotone ki-user text-4xl text-gray-400">
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+            </div>
+          </div>
+          <div class="absolute bottom-0 right-0">
+            <button
+              class="btn btn-icon btn-circle btn-sm btn-primary"
+              (click)="toggleImageChange()"
+            >
+              <i class="ki-duotone ki-camera text-white">
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+            </button>
+          </div>
         </div>
       </div>
       <div class="flex-grow">
@@ -81,5 +104,49 @@
 <app-modal-standard title="Información personal" size="2xl" modalId="editar-perfil">
   @if (getModalInstaceState('editar-perfil') | async) {
     <app-perfil-formulario></app-perfil-formulario>
+  }
+</app-modal-standard>
+
+<!-- Image Cropper Modal -->
+<app-modal-standard title="Cambiar imagen de perfil" size="lg" modalId="cambiar-imagen">
+  @if (getModalInstaceState('cambiar-imagen') | async) {
+    <div class="flex flex-col gap-4">
+      <div class="flex justify-center">
+        <div class="mb-3">
+          <input
+            type="file"
+            (change)="fileChangeEvent($event)"
+            accept="image/*"
+            class="hidden"
+            #fileInput
+          />
+          <button class="btn btn-secondary" (click)="fileInput.click()">Seleccionar imagen</button>
+        </div>
+      </div>
+
+      <div *ngIf="imageChangedEvent" class="image-cropper-container">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1"
+          [roundCropper]="true"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+          (loadImageFailed)="loadImageFailed()"
+          class="w-full"
+        ></image-cropper>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <button class="btn btn-secondary" (click)="cancelImageChange()">Cancelar</button>
+        <button
+          class="btn btn-primary"
+          [disabled]="!croppedImage() || imagenMuyGrande()"
+          (click)="saveProfileImage()"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
   }
 </app-modal-standard>
