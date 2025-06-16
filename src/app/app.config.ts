@@ -9,7 +9,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { EffectsApp, StoreApp } from './redux';
+import { EffectsApp, StoreApp } from './store';
 import { tokenInterceptor } from './common/interceptors/token.interceptor';
 import { httpErrorInterceptor } from './common/interceptors/error-handler/http-error.interceptor';
 
