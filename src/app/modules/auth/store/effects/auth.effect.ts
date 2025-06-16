@@ -9,6 +9,8 @@ import { loginFailure, loginRequest, loginSuccess, logout } from '../actions/log
 import { LOCALSTORAGE_KEYS } from '@app/core/constants/localstorage-keys.constant';
 import { environment } from '@environments/environment';
 import { AlertaService } from '@app/common/services/alerta.service';
+import { updateFailure, updateRequest, updateSuccess } from '../actions/perfil.action';
+import { ModalService } from '@app/common/services/modal.service';
 
 @Injectable()
 export class AuthEffects {
@@ -16,6 +18,7 @@ export class AuthEffects {
   private cookieService = inject(CookieService);
   private alertaService = inject(AlertaService);
   private authRepository = inject(AuthRepository);
+  private modalService = inject(ModalService);
   private router = inject(Router);
 
   constructor() {}
@@ -55,8 +58,7 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(loginSuccess),
         tap(() => {
-          // Redirigir al usuario a la página principal después de un login exitoso
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/perfil']);
         })
       ),
     { dispatch: false }
@@ -67,7 +69,6 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(loginFailure),
         tap(({ error }) => {
-          // Aquí podrías mostrar un mensaje de error o realizar otras acciones
           console.error('Error de autenticación:', error);
         })
       ),
@@ -83,6 +84,39 @@ export class AuthEffects {
           this.cookieService.delete(LOCALSTORAGE_KEYS.AUTH_TOKEN);
           this.cookieService.delete(LOCALSTORAGE_KEYS.REFRESH_TOKEN);
           this.router.navigate(['/auth/login']);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  updatePerfil$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateRequest),
+      switchMap(({ perfil }) =>
+        this.authRepository.updatePerfil(perfil).pipe(
+          map(response => updateSuccess({ response })),
+          catchError(error => of(updateFailure({ error })))
+        )
+      )
+    )
+  );
+
+  updatePerfilSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(updateSuccess),
+        tap(({ response }) => {
+          const cookieOptions = this.cookieService.getAuthCookieOptions(environment.cookieTime);
+          const usuarioCookie = this.cookieService.get(LOCALSTORAGE_KEYS.USER);
+
+          this.cookieService.set(
+            LOCALSTORAGE_KEYS.USER,
+            JSON.stringify({ ...JSON.parse(usuarioCookie), ...response.usuario }),
+            cookieOptions
+          );
+
+          this.modalService.close('editar-perfil');
+          this.alertaService.mostrarExito('Perfil actualizado exitosamente', 'Bienvenido');
         })
       ),
     { dispatch: false }

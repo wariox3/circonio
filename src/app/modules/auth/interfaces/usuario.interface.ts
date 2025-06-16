@@ -5,18 +5,6 @@ export interface LanguageFlag {
   active?: boolean;
 }
 
-export interface enviarDatosUsuario {
-  id: number;
-  nombreCorto: string;
-  nombre: string;
-  apellido: string;
-  telefono: string;
-  idioma: string;
-  imagen: string | null;
-  cargo: string;
-  numero_identificacion: string;
-}
-
 export interface UsuarioInformacionPerfil extends Partial<Usuario> {
   indicativoPais: string;
 }
@@ -40,3 +28,8 @@ export interface Usuario {
   socio_id: number | null;
   verificado: boolean;
 }
+
+export type UsuarioUpdate = Pick<
+  Usuario,
+  'nombre_corto' | 'nombre' | 'apellido' | 'telefono' | 'idioma' | 'numero_identificacion' | 'cargo'
+>;

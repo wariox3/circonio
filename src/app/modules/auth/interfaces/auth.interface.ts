@@ -1,4 +1,4 @@
-import { Usuario } from './usuario.interface';
+import { Usuario, UsuarioUpdate } from './usuario.interface';
 
 export interface LoginResponse {
   token: string;
@@ -8,4 +8,9 @@ export interface LoginResponse {
 
 export interface RegistroResponse {
   usuario: Usuario;
+}
+
+export interface UpdateResponse {
+  actualizacion: boolean;
+  usuario: UsuarioUpdate;
 }

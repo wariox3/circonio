@@ -1,0 +1,116 @@
+<form class="w-full" [formGroup]="formularioPerfil">
+  <div>
+    <div class="px-4 pb-4">
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="w-full">
+          <app-label [required]="true">Nombre</app-label>
+          <app-input
+            placeholder="Jhon"
+            formControlName="nombre"
+            [invalid]="formularioPerfil.get('nombre')?.invalid"
+            [dirty]="formularioPerfil.get('nombre')?.dirty"
+            [touched]="formularioPerfil.get('nombre')?.touched"
+            [errors]="{
+              required: 'El nombre es requerido.',
+            }"
+          />
+        </div>
+        <div class="w-full">
+          <app-label [required]="true">Apellido</app-label>
+          <app-input
+            placeholder="Doe"
+            formControlName="apellido"
+            [invalid]="formularioPerfil.get('apellido')?.invalid"
+            [dirty]="formularioPerfil.get('apellido')?.dirty"
+            [touched]="formularioPerfil.get('apellido')?.touched"
+            [errors]="{
+              required: 'El apellido es requerido.',
+            }"
+          />
+        </div>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <app-label [required]="true">Nombre para mostrar</app-label>
+          <app-input
+            formControlName="nombreCorto"
+            placeholder="Jhon Doe"
+            [invalid]="formularioPerfil.get('nombreCorto')?.invalid"
+            [dirty]="formularioPerfil.get('nombreCorto')?.dirty"
+            [touched]="formularioPerfil.get('nombreCorto')?.touched"
+            [errors]="{
+              required: 'El nombre para mostrar es requerido.',
+            }"
+          />
+        </div>
+        <div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <app-label>País</app-label>
+              <select class="select" formControlName="indicativo_pais">
+                @for (pais of paises; track $index) {
+                  <option
+                    [ngValue]="pais.dial_code"
+                    [selected]="formularioPerfil.get('indicativo_pais')?.value === pais.dial_code"
+                  >
+                    {{ pais.name_es }} {{ pais.dial_code }}
+                  </option>
+                }
+              </select>
+            </div>
+            <div>
+              <app-label>Teléfono</app-label>
+              <app-input
+                formControlName="telefono"
+                placeholder="123 456 7890"
+                [invalid]="formularioPerfil.get('telefono')?.invalid"
+                [dirty]="formularioPerfil.get('telefono')?.dirty"
+                [touched]="formularioPerfil.get('telefono')?.touched"
+                [errors]="{
+                  required: 'El teléfono es requerido.',
+                }"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <app-label>Número de identificación</app-label>
+          <app-input
+            formControlName="numero_identificacion"
+            placeholder="12345678"
+            [invalid]="formularioPerfil.get('numero_identificacion')?.invalid"
+            [dirty]="formularioPerfil.get('numero_identificacion')?.dirty"
+            [touched]="formularioPerfil.get('numero_identificacion')?.touched"
+            [errors]="{
+              required: 'El número de identificación es requerido.',
+            }"
+          />
+        </div>
+        <!-- <div>
+          <app-label>Idioma</app-label>
+          <select class="select" formControlName="idioma">
+            <option *ngFor="let idioma of langs" [ngValue]="idioma.lang">
+              {{ idioma.name }}
+            </option>
+          </select>
+        </div> -->
+      </div>
+    </div>
+    <div class="p-4 mt-2">
+      <div class="flex justify-end mt-2">
+        <button
+          type="button"
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          #btnGuardar
+          (click)="onSubmit()"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

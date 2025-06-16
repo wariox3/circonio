@@ -1,5 +1,5 @@
-import { Component, HostBinding } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, HostBinding, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -19,11 +19,13 @@ export class SidebarComponent {
   @HostBinding('attr.data-drawer-enable') drawerEnable = 'true|lg:false';
   @HostBinding('attr.id') id = 'sidebar';
 
+  private router = inject(Router);
+
   public sidebarMenu: any[] = [
     {
-      nombre: 'Home',
-      link: '/dashboard',
-      iconoClase: 'ki-filled ki-home',
+      nombre: 'Perfil',
+      link: '/perfil',
+      iconoClase: 'ki-filled ki-user',
       activo: false,
     },
     {
@@ -42,7 +44,6 @@ export class SidebarComponent {
   ];
 
   isActive(link: string): boolean {
-    // return this.router.url === link;
-    return false;
+    return this.router.url === link;
   }
 }

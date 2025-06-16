@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpBaseRepository } from '@app/core/repository/http-base.repository';
 import { Login } from '../interfaces/login.interface';
-import { LoginResponse } from '../interfaces/auth.interface';
+import { LoginResponse, UpdateResponse } from '../interfaces/auth.interface';
 import { Register, RegisterResponse } from '../interfaces/register.interface';
 import { RecoverPasswordResponse } from '../interfaces/recover-password.interface';
+import { Usuario } from '../interfaces/usuario.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -29,13 +30,17 @@ export class AuthRepository {
     );
   }
 
-  // recuperarClave(email: string) {
-  //   return this.http.post(
-  //     `${environment.url_api}/seguridad/usuario/cambio-clave-solicitar/`,
-  //     { username: email, accion: "clave" },
-  //     { context: noRequiereToken() }
-  //   );
-  // }
+  updatePerfil(perfil: Partial<Usuario>) {
+    return this.httpBase.put<UpdateResponse>(`seguridad/usuario/${perfil.id}/`, {
+      nombre: perfil.nombre,
+      apellido: perfil.apellido,
+      nombre_corto: perfil.nombre_corto,
+      telefono: perfil.telefono,
+      idioma: perfil.idioma,
+      cargo: perfil.cargo,
+      numero_identificacion: perfil.numero_identificacion,
+    });
+  }
 
   // cargarImagen(usuario_id: Number | string, imagenB64: string) {
   //   return this.http.post<{

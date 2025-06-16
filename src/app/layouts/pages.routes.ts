@@ -4,17 +4,17 @@ import { authGuard } from '@app/common/guards/auth.guard';
 export default [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'perfil',
     pathMatch: 'full',
   },
   {
-    path: 'dashboard',
+    path: 'perfil',
     canActivate: [authGuard],
     loadComponent: () => import('./admin-layout/admin-layout.component'),
     children: [
       {
         path: '',
-        loadChildren: () => import('../modules/home/pages/dashboard/dashboard.routes'),
+        loadChildren: () => import('../modules/profile/profile.routes'),
       },
     ],
   },
