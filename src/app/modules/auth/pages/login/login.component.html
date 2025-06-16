@@ -36,6 +36,7 @@
         <app-input
           placeholder="Ingresa tu contraseña"
           formControlName="password"
+          type="password"
           [invalid]="formularioLogin.get('password')?.invalid"
           [dirty]="formularioLogin.get('password')?.dirty"
           [touched]="formularioLogin.get('password')?.touched"
