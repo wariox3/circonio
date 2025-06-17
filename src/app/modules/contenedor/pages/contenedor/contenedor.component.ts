@@ -3,6 +3,7 @@ import { ContenedorRepository } from '../../repositories/contenedor.repository';
 import { Store } from '@ngrx/store';
 import { selectCurrentUser } from '@app/modules/auth/store/selectors/auth.selector';
 import { NgIf } from '@angular/common';
+import { Contenedor } from '../../interfaces/contenedor.interface';
 
 @Component({
   selector: 'app-contenedor',
@@ -17,7 +18,7 @@ export default class ContenedorComponent implements OnInit {
   private store = inject(Store);
   private usuarioId: string;
 
-  public contenedores = signal<any[]>([]);
+  public contenedores = signal<Contenedor[]>([]);
 
   ngOnInit() {
     this.store.select(selectCurrentUser).subscribe(usuario => {
