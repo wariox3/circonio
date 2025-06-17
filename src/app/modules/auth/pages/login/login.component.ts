@@ -38,7 +38,7 @@ export default class LoginComponent implements OnInit {
     username: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.required]),
     cf_turnstile_response: new FormControl(''),
-    proyecto: new FormControl('REDDOC'),
+    proyecto: new FormControl('CUENTA'),
   });
 
   ngOnInit(): void {
