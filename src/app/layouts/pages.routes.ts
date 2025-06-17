@@ -18,4 +18,26 @@ export default [
       },
     ],
   },
+  {
+    path: 'seguridad',
+    canActivate: [authGuard],
+    loadComponent: () => import('./admin-layout/admin-layout.component'),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../modules/securidad/seguridad.routes'),
+      },
+    ],
+  },
+  {
+    path: 'contenedor',
+    canActivate: [authGuard],
+    loadComponent: () => import('./admin-layout/admin-layout.component'),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../modules/contenedor/contenedor.routes'),
+      },
+    ],
+  },
 ] as Routes;

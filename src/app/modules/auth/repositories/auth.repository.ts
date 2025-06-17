@@ -5,6 +5,7 @@ import { LoginResponse, UpdateResponse } from '../interfaces/auth.interface';
 import { Register, RegisterResponse } from '../interfaces/register.interface';
 import { RecoverPasswordResponse } from '../interfaces/recover-password.interface';
 import { Usuario } from '../interfaces/usuario.interface';
+import { CambiarPassword } from '@app/modules/securidad/interfaces/seguridad.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -66,9 +67,10 @@ export class AuthRepository {
     });
   }
 
-  // perfil(codigoUsuario: number) {
-  //   return this.http.get<UsuarioInformacionPerfil>(
-  //     `${environment.url_api}/seguridad/usuario/${codigoUsuario}/`,
-  //   );
-  // }
+  cambiarPassword(cambiarPassword: CambiarPassword) {
+    return this.httpBase.post<UpdateResponse>(`seguridad/usuario/cambio-clave/`, {
+      usuario_id: cambiarPassword.usuarioId,
+      password: cambiarPassword.password,
+    });
+  }
 }

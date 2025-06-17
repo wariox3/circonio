@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Seguridad</h1>
+  </div>
+  <div class="card-body">
+    <div class="flex justify-between">
+      <div>
+        <p class="text-md mb-2">Contraseña</p>
+        <p class="text-xs text-gray-500">***************</p>
+      </div>
+      <div>
+        <button class="btn btn-primary" (click)="openModal('modal-password')">
+          Cambiar contraseña
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-standard modalId="modal-password" title="Cambiar contraseña">
+  @if (getModalInstaceState('modal-password') | async) {
+    <app-cambiar-password></app-cambiar-password>
+  }
+</app-modal-standard>
