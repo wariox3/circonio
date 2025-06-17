@@ -36,7 +36,7 @@ export class SidebarComponent {
     },
     {
       nombre: 'Contenedores',
-      link: '/contenedores',
+      link: '/contenedor',
       iconoClase: 'ki-filled ki-abstract-26',
       activo: false,
     },

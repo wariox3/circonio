@@ -29,4 +29,15 @@ export default [
       },
     ],
   },
+  {
+    path: 'contenedor',
+    canActivate: [authGuard],
+    loadComponent: () => import('./admin-layout/admin-layout.component'),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../modules/contenedor/contenedor.routes'),
+      },
+    ],
+  },
 ] as Routes;
