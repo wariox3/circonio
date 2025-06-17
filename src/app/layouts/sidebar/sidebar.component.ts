@@ -28,6 +28,18 @@ export class SidebarComponent {
       iconoClase: 'ki-filled ki-user',
       activo: false,
     },
+    {
+      nombre: 'Seguridad',
+      link: '/seguridad',
+      iconoClase: 'ki-filled ki-lock',
+      activo: false,
+    },
+    {
+      nombre: 'Contenedores',
+      link: '/contenedores',
+      iconoClase: 'ki-filled ki-abstract-26',
+      activo: false,
+    },
     // {
     //   nombre: 'Titulo',
     //   link: '',
