@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputComponent } from '@app/common/components/ui/form/input/input.component';
 import { LabelComponent } from '@app/common/components/ui/form/label/label.component';
@@ -8,6 +8,8 @@ import { RouterLink } from '@angular/router';
 import { AdvancedButtonComponent } from '@app/common/components/ui/advanced-button/advanced-button.component';
 import { selectIsLoading } from '../../store/selectors/auth.selector';
 import { AsyncPipe } from '@angular/common';
+import { environment } from '@environments/environment';
+import { NgxTurnstileModule } from 'ngx-turnstile';
 
 @Component({
   selector: 'app-login',
@@ -19,19 +21,31 @@ import { AsyncPipe } from '@angular/common';
     LabelComponent,
     AdvancedButtonComponent,
     AsyncPipe,
+    NgxTurnstileModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class LoginComponent {
+export default class LoginComponent implements OnInit {
   private store = inject(Store);
   public isLoading$ = this.store.select(selectIsLoading);
+  public isProduction: boolean = environment.production;
+  public turnstileSiteKey: string = environment.turnstileSiteKey;
+  public turnstileToken: string = '';
 
   public formularioLogin = new FormGroup({
     username: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.required]),
+    cf_turnstile_response: new FormControl(''),
+    proyecto: new FormControl('REDDOC'),
   });
+
+  ngOnInit(): void {
+    if (this.isProduction) {
+      this.formularioLogin.get('cf_turnstile_response')?.addValidators([Validators.required]);
+    }
+  }
 
   login() {
     this.store.dispatch(
@@ -39,76 +53,15 @@ export default class LoginComponent {
         credentials: {
           username: this.formularioLogin.value.username,
           password: this.formularioLogin.value.password,
+          cfTurnstileResponse: this.formularioLogin.value.cf_turnstile_response,
+          proyecto: this.formularioLogin.value.proyecto,
         },
       })
     );
   }
-  // private tokenService = inject(TokenService)
-  // private authService = inject(AuthService);
-  // private _router = inject(Router);
-  // turnstileToken: string = '';
-  // turnstileSiteKey: string = environment.turnstileSiteKey;
-  // public isLoading$ = new BehaviorSubject<boolean>(false);
-  // isProduction: boolean = environment.production;
-  // formularioLogin = new FormGroup({
-  //   cf_turnstile_response: new FormControl(''),
-  //   proyecto: new FormControl('RUTEO'),
-  //   username: new FormControl('', [Validators.email, Validators.required]),
-  //   password: new FormControl(
-  //     '',
-  //     Validators.compose([
-  //       Validators.required,
-  //       Validators.minLength(8),
-  //       Validators.maxLength(20),
-  //     ])
-  //   ),
-  // });
-  // ngOnInit(): void {
-  //   if (this.isProduction) {
-  //     this.formularioLogin
-  //       .get('cf_turnstile_response')
-  //       ?.addValidators([Validators.required]);
-  //   }
-  // }
-  // onTurnstileSuccess(token: string): void {
-  //   this.turnstileToken = token;
-  //   this.formularioLogin.get('cf_turnstile_response')?.setValue(token);
-  //   this.changeDetectorRef.detectChanges();
-  // }
-  // enviar() {
-  //   if (this.formularioLogin.invalid) {
-  //     this.formularioLogin.markAllAsTouched();
-  //     this.formularioLogin.markAsDirty();
-  //     return;
-  //   }
-  //   this.isLoading$.next(true);
-  //   this.authService
-  //     .login(this.formularioLogin.value)
-  //     .pipe(
-  //       catchError(() => {
-  //         return of(null);
-  //       }),
-  //       finalize(() => this.isLoading$.next(false))
-  //     )
-  //     .subscribe((resultado: RespuestaLogin) => {
-  //       if (resultado.token) {
-  //         let calcularTiempo = new Date(
-  //           new Date().getTime() + environment.sessionLifeTime * 60 * 60 * 1000
-  //         );
-  //         this.store.dispatch(
-  //           usuarioIniciar({
-  //             usuario: resultado.user,
-  //           })
-  //         );
-  //         this.tokenService.guardar(resultado.token, calcularTiempo);
-  //         this._router.navigate(['contenedor']);
-  //       }
-  //     });
-  // }
-  // get username() {
-  //   return this.formularioLogin.get('username');
-  // }
-  // get password() {
-  //   return this.formularioLogin.get('password');
-  // }
+
+  onTurnstileSuccess(token: string): void {
+    this.turnstileToken = token;
+    this.formularioLogin.get('cf_turnstile_response')?.setValue(token);
+  }
 }
