@@ -1,7 +1,7 @@
 // src/app/shared/ui/input/input.component.ts
 import { NgIf } from '@angular/common';
 import { Component, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
@@ -48,6 +48,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() invalid: boolean | undefined = false;
   @Input() dirty: boolean | undefined = false;
   @Input() touched: boolean | undefined = false;
+  @Input() control: AbstractControl | null = null; // Nuevo input para recibir el control del formulario
 
   value: string = ''; // Valor interno del input
   onChange: any = () => {}; // Función para notificar cambios
@@ -85,7 +86,46 @@ export class InputComponent implements ControlValueAccessor {
   // Obtiene los mensajes de error
   getErrors(): string[] {
     if (!this.errors) return [];
-    return Object.keys(this.errors).map(key => this.errors[key] || 'Error desconocido');
+
+    // Si tenemos acceso al control, verificamos qué errores específicos están ocurriendo
+    if (this.control && this.control.errors) {
+      const activeErrors: string[] = [];
+
+      // Recorremos las claves de los errores del control
+      Object.keys(this.control.errors).forEach(errorKey => {
+        // Convertimos el errorKey a camelCase si es necesario (minlength -> minLength)
+        const normalizedKey = this.normalizeErrorKey(errorKey);
+
+        // Si tenemos un mensaje para este error, lo añadimos
+        if (this.errors[normalizedKey]) {
+          activeErrors.push(this.errors[normalizedKey]);
+        }
+      });
+
+      return activeErrors;
+    }
+
+    // Si no tenemos acceso al control, mantenemos el comportamiento anterior
+    // pero solo si el input es inválido
+    if (this.invalid) {
+      return Object.keys(this.errors).map(key => this.errors[key] || 'Error desconocido');
+    }
+
+    return [];
+  }
+
+  // Normaliza las claves de error (convierte minlength a minLength, etc.)
+  private normalizeErrorKey(key: string): string {
+    // Mapa de conversiones comunes
+    const keyMap: { [key: string]: string } = {
+      minlength: 'minLength',
+      maxlength: 'maxLength',
+      required: 'required',
+      pattern: 'pattern',
+      email: 'email',
+    };
+
+    return keyMap[key] || key;
   }
 
   // Método para actualizar el estado de validación
