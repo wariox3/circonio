@@ -67,4 +67,11 @@
       ></app-advanced-button>
     </form>
   </div>
+
+  @if (isProduction) {
+    <ngx-turnstile
+      [siteKey]="turnstileSiteKey"
+      (resolved)="onTurnstileSuccess($event)"
+    ></ngx-turnstile>
+  }
 </div>
