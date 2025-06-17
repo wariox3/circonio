@@ -28,19 +28,19 @@ export class SidebarComponent {
       iconoClase: 'ki-filled ki-user',
       activo: false,
     },
-    {
-      nombre: 'Titulo',
-      link: '',
-      iconoClase: 'ki-filled ki-setting-2',
-      activo: false,
-      tipoAcordion: true,
-      children: [
-        {
-          nombre: 'Sub',
-          link: '/administracion/vehiculo/lista',
-        },
-      ],
-    },
+    // {
+    //   nombre: 'Titulo',
+    //   link: '',
+    //   iconoClase: 'ki-filled ki-setting-2',
+    //   activo: false,
+    //   tipoAcordion: true,
+    //   children: [
+    //     {
+    //       nombre: 'Sub',
+    //       link: '/administracion/vehiculo/lista',
+    //     },
+    //   ],
+    // },
   ];
 
   isActive(link: string): boolean {

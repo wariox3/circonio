@@ -1,8 +1,3 @@
-<button class="btn btn-secondary mb-4 inline-flex items-center">
-  <i class="ki-duotone ki-left"></i>
-  Volver
-</button>
-
 <div class="card">
   <div class="card-header">
     <h1 class="card-title">Perfil</h1>
@@ -16,13 +11,13 @@
         <div class="relative w-[100px] lg:w-[160px] h-[100px] lg:h-[160px]">
           <div class="w-full h-full overflow-hidden rounded-full border-2 border-gray-200">
             <img
-              *ngIf="profileImage() && !isChangingImage"
+              *ngIf="profileImage()"
               [src]="getProfileImageUrl()"
               alt="Profile Image"
               class="w-full h-full object-cover"
             />
             <div
-              *ngIf="!profileImage && !isChangingImage"
+              *ngIf="!profileImage()"
               class="w-full h-full bg-gray-200 flex items-center justify-center"
             >
               <i class="ki-duotone ki-user text-4xl text-gray-400">
@@ -118,46 +113,9 @@
   }
 </app-modal-standard>
 
-<!-- Image Cropper Modal -->
+<!-- Image Cropper Component -->
 <app-modal-standard title="Cambiar imagen de perfil" size="lg" modalId="cambiar-imagen">
   @if (getModalInstaceState('cambiar-imagen') | async) {
-    <div class="flex flex-col gap-4">
-      <div class="flex justify-center">
-        <div class="mb-3">
-          <input
-            type="file"
-            (change)="fileChangeEvent($event)"
-            accept="image/*"
-            class="hidden"
-            #fileInput
-          />
-          <button class="btn btn-secondary" (click)="fileInput.click()">Seleccionar imagen</button>
-        </div>
-      </div>
-
-      <div *ngIf="imageChangedEvent" class="image-cropper-container">
-        <image-cropper
-          [imageChangedEvent]="imageChangedEvent"
-          [maintainAspectRatio]="true"
-          [aspectRatio]="1"
-          [roundCropper]="true"
-          format="png"
-          (imageCropped)="imageCropped($event)"
-          (loadImageFailed)="loadImageFailed()"
-          class="w-full"
-        ></image-cropper>
-      </div>
-
-      <div class="flex justify-between mt-4">
-        <button class="btn btn-secondary" (click)="cancelImageChange()">Cancelar</button>
-        <button
-          class="btn btn-primary"
-          [disabled]="!croppedImage() || imagenMuyGrande()"
-          (click)="saveProfileImage()"
-        >
-          Guardar
-        </button>
-      </div>
-    </div>
+    <app-image-cropper (imageSaved)="handleImageSaved($event)"></app-image-cropper>
   }
 </app-modal-standard>

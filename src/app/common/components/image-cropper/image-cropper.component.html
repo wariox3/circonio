@@ -1,0 +1,46 @@
+<!-- Image Cropper Modal -->
+<div class="flex flex-col gap-4">
+  <div class="flex justify-center">
+    <div class="mb-3">
+      <input
+        type="file"
+        (change)="fileChangeEvent($event)"
+        accept="image/*"
+        class="hidden"
+        #fileInput
+      />
+      <button class="btn btn-secondary" (click)="selectImage()">Seleccionar imagen</button>
+    </div>
+  </div>
+
+  <div *ngIf="imageChangedEvent" class="image-cropper-container">
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1"
+      [roundCropper]="true"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (loadImageFailed)="loadImageFailed()"
+      class="w-full"
+    ></image-cropper>
+  </div>
+
+  @if (imagenMuyGrande()) {
+    <div class="alert alert-danger">
+      La imagen es demasiado grande. El tamaño máximo permitido es
+      {{ maxImageSizeBytes / (1024 * 1024) }}MB.
+    </div>
+  }
+
+  <div class="flex justify-between mt-4">
+    <button class="btn btn-secondary" (click)="cancelImageChange()">Cancelar</button>
+    <button
+      class="btn btn-primary"
+      [disabled]="!croppedImage() || imagenMuyGrande()"
+      (click)="saveImage()"
+    >
+      Guardar
+    </button>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { AsyncPipe, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ImageCropperComponent } from '@app/common/components/image-cropper/image-cropper.component';
 import { ModalStandardComponent } from '@app/common/components/ui/modals/modal-standard/modal-standard.component';
 import { ModalService } from '@app/common/services/modal.service';
 import {
@@ -9,7 +10,6 @@ import {
 } from '@app/modules/auth/store/actions/perfil.action';
 import { selectCurrentUser } from '@app/modules/auth/store/selectors/auth.selector';
 import { Store } from '@ngrx/store';
-import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { PerfilFormularioComponent } from '../../components/perfil-formulario/perfil-formulario.component';
 import { ProfileImageService } from '@app/core/services/profile-image.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -38,11 +38,6 @@ export default class ProfileComponent implements OnInit {
   // Observable for template compatibility
   public user$ = this.store.select(selectCurrentUser);
   public currentUser = toSignal(this.store.select(selectCurrentUser));
-  public isChangingImage = false;
-  public imageChangedEvent: any = '';
-  public croppedImage = signal<string | null>(null);
-  public imagenMuyGrande = signal<boolean>(false);
-  public MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
 
   // Use the service's profileImageUrl signal
   public profileImage = this.profileImageService.profileImageUrl;
@@ -65,48 +60,6 @@ export default class ProfileComponent implements OnInit {
     this.openModal('cambiar-imagen');
   }
 
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
-  }
-
-  imageCropped(event: ImageCroppedEvent): void {
-    // Check if we have a blob to process
-    if (event.blob) {
-      // Validate image size
-      this.imagenMuyGrande.set(event.blob.size >= this.MAX_IMAGE_SIZE_BYTES);
-
-      if (!this.imagenMuyGrande()) {
-        // Convert to JPEG format with better compression
-        const convertedBlob = event.blob.slice(0, event.blob.size, 'image/jpeg');
-
-        // Read as data URL asynchronously
-        const reader = new FileReader();
-        reader.readAsDataURL(convertedBlob);
-
-        reader.onloadend = () => {
-          if (reader.result) {
-            // Set the base64 string to our signal
-            this.croppedImage.set(reader.result as string);
-          }
-        };
-      }
-    } else if (event.base64) {
-      // Fallback to base64 if blob is not available
-      this.croppedImage.set(event.base64);
-    }
-  }
-
-  loadImageFailed(): void {
-    console.error('La imagen no pudo ser cargada');
-    // You could show a toast notification here
-  }
-
-  cancelImageChange(): void {
-    this.imageChangedEvent = null;
-    this.croppedImage.set(null);
-    this.modalService.close('cambiar-imagen');
-  }
-
   /**
    * Get profile image URL with cache busting
    */
@@ -121,8 +74,10 @@ export default class ProfileComponent implements OnInit {
     this.profileImageService.refreshImageCache();
   }
 
-  saveProfileImage(): void {
-    const base64 = this.croppedImage();
+  /**
+   * Handle the image saved event from the image cropper component
+   */
+  handleImageSaved(base64: string): void {
     const user = this.currentUser();
     if (base64 && user) {
       // Set temporary profile image for immediate feedback
@@ -137,8 +92,6 @@ export default class ProfileComponent implements OnInit {
           },
         })
       );
-
-      this.cancelImageChange();
     }
   }
 

@@ -53,8 +53,6 @@ export class AuthEffects {
               cookieOptions
             );
 
-            this.alertaService.mostrarExito('Inicio de sesión exitoso', 'Bienvenido');
-
             return loginSuccess({ response });
           }),
           catchError(error => of(loginFailure({ error })))
@@ -162,6 +160,7 @@ export class AuthEffects {
             cookieOptions
           );
 
+          this.modalService.close('cambiar-imagen');
           this.alertaService.mostrarExito('Imagen actualizada exitosamente', 'Imagen');
         })
       ),
