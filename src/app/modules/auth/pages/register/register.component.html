@@ -30,7 +30,8 @@
       <div class="flex flex-col gap-1">
         <label class="form-label font-normal text-gray-900"> Contraseña </label>
         <app-input
-          placeholder="Ingresa tu contraseña"
+          type="password"
+          placeholder="************"
           formControlName="password"
           [invalid]="formularioRegister.get('password')?.invalid"
           [dirty]="formularioRegister.get('password')?.dirty"
@@ -43,13 +44,15 @@
       <div class="flex flex-col gap-1">
         <label class="form-label font-normal text-gray-900"> Confirmar contraseña </label>
         <app-input
-          placeholder="Ingresa tu contraseña"
+          type="password"
+          placeholder="************"
           formControlName="confirmarContrasena"
           [invalid]="formularioRegister.get('confirmarContrasena')?.invalid"
           [dirty]="formularioRegister.get('confirmarContrasena')?.dirty"
           [touched]="formularioRegister.get('confirmarContrasena')?.touched"
           [errors]="{
             required: 'La contraseña es requerida.',
+            notMatching: 'Las contraseñas no coinciden.',
           }"
         ></app-input>
       </div>

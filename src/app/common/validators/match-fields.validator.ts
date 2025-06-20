@@ -24,7 +24,7 @@ export function matchFieldsValidator(
       // Añadimos el error al segundo control (el de confirmación)
       matchingControl.setErrors({
         ...matchingControl.errors,
-        notMatching: true
+        notMatching: true,
       });
       return { notMatching: true };
     }
