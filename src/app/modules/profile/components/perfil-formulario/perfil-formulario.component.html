@@ -7,9 +7,7 @@
           <app-input
             placeholder="Jhon"
             formControlName="nombre"
-            [invalid]="formularioPerfil.get('nombre')?.invalid"
-            [dirty]="formularioPerfil.get('nombre')?.dirty"
-            [touched]="formularioPerfil.get('nombre')?.touched"
+            [control]="formularioPerfil.get('nombre')"
             [errors]="{
               required: 'El nombre es requerido.',
             }"
@@ -20,9 +18,7 @@
           <app-input
             placeholder="Doe"
             formControlName="apellido"
-            [invalid]="formularioPerfil.get('apellido')?.invalid"
-            [dirty]="formularioPerfil.get('apellido')?.dirty"
-            [touched]="formularioPerfil.get('apellido')?.touched"
+            [control]="formularioPerfil.get('apellido')"
             [errors]="{
               required: 'El apellido es requerido.',
             }"
@@ -36,9 +32,7 @@
           <app-input
             formControlName="nombreCorto"
             placeholder="Jhon Doe"
-            [invalid]="formularioPerfil.get('nombreCorto')?.invalid"
-            [dirty]="formularioPerfil.get('nombreCorto')?.dirty"
-            [touched]="formularioPerfil.get('nombreCorto')?.touched"
+            [control]="formularioPerfil.get('nombreCorto')"
             [errors]="{
               required: 'El nombre para mostrar es requerido.',
             }"
@@ -64,9 +58,7 @@
               <app-input
                 formControlName="telefono"
                 placeholder="123 456 7890"
-                [invalid]="formularioPerfil.get('telefono')?.invalid"
-                [dirty]="formularioPerfil.get('telefono')?.dirty"
-                [touched]="formularioPerfil.get('telefono')?.touched"
+                [control]="formularioPerfil.get('telefono')"
                 [errors]="{
                   required: 'El teléfono es requerido.',
                 }"
@@ -82,9 +74,7 @@
           <app-input
             formControlName="numero_identificacion"
             placeholder="12345678"
-            [invalid]="formularioPerfil.get('numero_identificacion')?.invalid"
-            [dirty]="formularioPerfil.get('numero_identificacion')?.dirty"
-            [touched]="formularioPerfil.get('numero_identificacion')?.touched"
+            [control]="formularioPerfil.get('numero_identificacion')"
             [errors]="{
               required: 'El número de identificación es requerido.',
             }"

@@ -23,14 +23,18 @@ export class PerfilFormularioComponent implements OnInit {
 
   public paises = PAISES;
   public formularioPerfil = new FormGroup({
-    id: new FormControl('', [Validators.required]),
+    id: new FormControl('', []),
     nombre: new FormControl('', [Validators.required]),
     apellido: new FormControl('', [Validators.required]),
     nombreCorto: new FormControl('', [Validators.required]),
-    indicativo_pais: new FormControl('', [Validators.required]),
-    telefono: new FormControl('', [Validators.required]),
+    indicativo_pais: new FormControl('', []),
+    telefono: new FormControl('', [
+      Validators.minLength(3),
+      Validators.maxLength(50),
+      Validators.pattern(/^[0-9]+$/),
+    ]),
     numero_identificacion: new FormControl('', [Validators.required]),
-    idioma: new FormControl('', [Validators.required]),
+    idioma: new FormControl('', []),
   });
 
   ngOnInit(): void {
