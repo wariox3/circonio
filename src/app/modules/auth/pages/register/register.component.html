@@ -18,9 +18,7 @@
         <app-input
           placeholder="Ingresa tu correo"
           formControlName="username"
-          [invalid]="formularioRegister.get('username')?.invalid"
-          [dirty]="formularioRegister.get('username')?.dirty"
-          [touched]="formularioRegister.get('username')?.touched"
+          [control]="formularioRegister.get('username')"
           [errors]="{
             required: 'El correo es requerido.',
             email: 'Ingresa un correo válido.',
@@ -33,9 +31,7 @@
           type="password"
           placeholder="************"
           formControlName="password"
-          [invalid]="formularioRegister.get('password')?.invalid"
-          [dirty]="formularioRegister.get('password')?.dirty"
-          [touched]="formularioRegister.get('password')?.touched"
+          [control]="formularioRegister.get('password')"
           [errors]="{
             required: 'La contraseña es requerida.',
           }"
@@ -47,9 +43,7 @@
           type="password"
           placeholder="************"
           formControlName="confirmarContrasena"
-          [invalid]="formularioRegister.get('confirmarContrasena')?.invalid"
-          [dirty]="formularioRegister.get('confirmarContrasena')?.dirty"
-          [touched]="formularioRegister.get('confirmarContrasena')?.touched"
+          [control]="formularioRegister.get('confirmarContrasena')"
           [errors]="{
             required: 'La contraseña es requerida.',
             notMatching: 'Las contraseñas no coinciden.',
