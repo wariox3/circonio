@@ -27,6 +27,7 @@ export interface Usuario {
   is_active: boolean;
   socio_id: number | null;
   verificado: boolean;
+  es_socio: boolean;
 }
 
 export type UsuarioUpdate = Pick<
