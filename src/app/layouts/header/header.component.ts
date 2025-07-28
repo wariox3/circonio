@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angula
 import { MenuComponent } from '../menu/menu.component';
 import { selectCurrentUser } from '@app/modules/auth/store/selectors/auth.selector';
 import { Store } from '@ngrx/store';
+import { ProfileImageService } from '@app/core/services/profile-image.service';
 
 @Component({
   selector: 'app-header',
@@ -20,9 +21,11 @@ export class HeaderComponent {
   @HostBinding('attr.data-sticky-name') dataStickyName = 'header';
   @HostBinding('id') hostId = 'header';
 
+  private profileImageService = inject(ProfileImageService);
   private store = inject(Store);
 
   public usuario$ = this.store.select(selectCurrentUser);
+  public profileImageThumbnail = this.profileImageService.profileImageThumbnail;
   // public contenedorNombre$: Observable<string>;
 
   public menuItems: any[] = [

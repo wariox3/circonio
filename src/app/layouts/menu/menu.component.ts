@@ -22,7 +22,7 @@ export class MenuComponent {
   private profileImageService = inject(ProfileImageService);
 
   // Use the service's profileImageUrl signal
-  protected profileImageUrl = this.profileImageService.profileImageUrl;
+  protected profileImageUrl = this.profileImageService.profileImageThumbnail;
 
   cerrarSesion() {
     this.store.dispatch(logout());

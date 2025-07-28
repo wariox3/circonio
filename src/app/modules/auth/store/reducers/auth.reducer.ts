@@ -134,7 +134,11 @@ export const authReducer = createReducer(
   // Manejar el éxito del perfil
   on(removeImageSuccess, (state, { response }) => ({
     ...state,
-    user: { ...state.user, imagen: response.imagen },
+    user: {
+      ...state.user,
+      imagen: response.imagen,
+      imagen_thumbnail: response.imagen_thumbnail,
+    },
     loading: false,
     error: null,
     isAuthenticated: true,

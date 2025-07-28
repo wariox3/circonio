@@ -32,7 +32,7 @@ export const updateFailure = createAction(LoginActionTypes.UPDATE_FAILURE, props
 
 export const updateImageRequest = createAction(
   LoginActionTypes.UPDATE_IMAGE_REQUEST,
-  props<{ perfil: { imagen: string; usuario_id: string } }>()
+  props<{ perfil: { imagen: string; usuario_id: string; imagen_thumbnail: string } }>()
 );
 
 export const updateImageSuccess = createAction(

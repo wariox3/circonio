@@ -156,7 +156,11 @@ export class AuthEffects {
 
           this.cookieService.set(
             LOCALSTORAGE_KEYS.USER,
-            JSON.stringify({ ...JSON.parse(usuarioCookie), imagen: response.imagen }),
+            JSON.stringify({
+              ...JSON.parse(usuarioCookie),
+              imagen: response.imagen,
+              imagen_thumbnail: response.imagen_thumbnail,
+            }),
             cookieOptions
           );
 
@@ -193,7 +197,11 @@ export class AuthEffects {
 
           this.cookieService.set(
             LOCALSTORAGE_KEYS.USER,
-            JSON.stringify({ ...JSON.parse(usuarioCookie), imagen: response.imagen }),
+            JSON.stringify({
+              ...JSON.parse(usuarioCookie),
+              imagen: response.imagen,
+              imagen_thumbnail: response.imagen_thumbnail,
+            }),
             cookieOptions
           );
 
