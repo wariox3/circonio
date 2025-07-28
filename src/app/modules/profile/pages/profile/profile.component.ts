@@ -89,6 +89,7 @@ export default class ProfileComponent implements OnInit {
           perfil: {
             imagen: base64,
             usuario_id: user.id,
+            imagen_thumbnail: base64,
           },
         })
       );
@@ -96,6 +97,9 @@ export default class ProfileComponent implements OnInit {
   }
 
   eliminarImagenPerfil(): void {
+    // Limpiar la imagen temporal para asegurar que se actualice correctamente
+    this.profileImageService.clearTempProfileImage();
+
     this.store.dispatch(
       removeImageRequest({
         usuario_id: this.currentUser().id,

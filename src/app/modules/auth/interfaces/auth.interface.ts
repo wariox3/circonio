@@ -18,9 +18,11 @@ export interface UpdateResponse {
 export interface UpdateImageResponse {
   cargar: boolean;
   imagen: string;
+  imagen_thumbnail: string;
 }
 
 export interface RemoveImageResponse {
   limpiar: boolean;
   imagen: string;
+  imagen_thumbnail: string;
 }

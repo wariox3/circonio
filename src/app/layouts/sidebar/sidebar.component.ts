@@ -40,6 +40,12 @@ export class SidebarComponent {
       iconoClase: 'ki-filled ki-abstract-26',
       activo: false,
     },
+    {
+      nombre: 'Socio',
+      link: '/socio',
+      iconoClase: 'ki-filled ki-people',
+      activo: false,
+    },
     // {
     //   nombre: 'Titulo',
     //   link: '',

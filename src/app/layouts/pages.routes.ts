@@ -30,6 +30,17 @@ export default [
     ],
   },
   {
+    path: 'socio',
+    canActivate: [authGuard],
+    loadComponent: () => import('./admin-layout/admin-layout.component'),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../modules/socio/socio.routes'),
+      },
+    ],
+  },
+  {
     path: 'contenedor',
     canActivate: [authGuard],
     loadComponent: () => import('./admin-layout/admin-layout.component'),

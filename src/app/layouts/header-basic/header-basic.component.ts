@@ -1,11 +1,9 @@
-import { Component, HostBinding, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { MenuItems } from '../../interfaces/general/header/menu.interface';
-import { General } from '../../common/clases/general';
-import { obtenerUsuario, obtenerUsuarioNombreCorto } from '../../redux/selectors/usuario.selector';
-import { obtenerContenedorNombre } from '../../redux/selectors/contenedor.selector';
-import { MenuComponent } from '../menu/menu.component';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
+import { selectCurrentUser } from '@app/modules/auth/store/selectors/auth.selector';
+import { Store } from '@ngrx/store';
+import { map, Observable } from 'rxjs';
+import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-header-basic',
@@ -15,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header-basic.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderBasicComponent extends General implements OnInit {
+export class HeaderBasicComponent {
   @HostBinding('class') hostClass =
     'fixed py-4 top-0 z-10 left-0 right-0 flex items-stretch shrink-0 bg-[#fefefe] dark:bg-coal-500 shadow-sm dark:border-b dark:border-b-coal-100';
   @HostBinding('attr.role') hostRole = 'banner';
@@ -23,10 +21,12 @@ export class HeaderBasicComponent extends General implements OnInit {
   @HostBinding('attr.data-sticky-name') dataStickyName = 'header';
   @HostBinding('id') hostId = 'header';
 
-  public usuario$ = this.store.select(obtenerUsuario);
+  private store = inject(Store);
+
+  public usuario$ = this.store.select(selectCurrentUser);
   public contenedorNombre$: Observable<string>;
 
-  public menuItems: MenuItems[] = [
+  public menuItems: any[] = [
     {
       titulo: 'Perfil',
       icono: 'ki-filled ki-user',
@@ -44,9 +44,7 @@ export class HeaderBasicComponent extends General implements OnInit {
     },
   ];
 
-  constructor() {
-    super();
-  }
+  constructor() {}
 
   private imageTimestamp = Date.now();
 
@@ -60,9 +58,5 @@ export class HeaderBasicComponent extends General implements OnInit {
         }
       })
     );
-  }
-
-  ngOnInit(): void {
-    this.contenedorNombre$ = this.store.select(obtenerContenedorNombre);
   }
 }

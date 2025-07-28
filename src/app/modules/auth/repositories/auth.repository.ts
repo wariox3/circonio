@@ -52,6 +52,7 @@ export class AuthRepository {
     return this.httpBase.post<{
       cargar: boolean;
       imagen: string;
+      imagen_thumbnail: string;
     }>(`seguridad/usuario/cargar-imagen/`, {
       usuario_id,
       imagenB64: base64,
@@ -62,6 +63,7 @@ export class AuthRepository {
     return this.httpBase.post<{
       limpiar: boolean;
       imagen: string;
+      imagen_thumbnail: string;
     }>(`seguridad/usuario/limpiar-imagen/`, {
       usuario_id,
     });

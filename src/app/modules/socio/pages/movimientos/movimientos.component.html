@@ -1,0 +1,45 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Movimientos</h3>
+  </div>
+  <div>
+    <div class="card-table scrollable-x-auto">
+      <table class="table align-middle text-gray-700 font-medium text-sm">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Fecha vence</th>
+            <th>Total</th>
+            <th>Afectado</th>
+            <th>Saldo</th>
+            <th>Saldo enmascarado</th>
+            <th>Documento fisico</th>
+            <th>Contenedor</th>
+            <th>Cód</th>
+            <th>Nombre</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (contenedor of arrMovimientos(); let idx = $index; track idx) {
+            <tr>
+              <td>{{ contenedor.id }}</td>
+              <td>{{ contenedor.tipo }}</td>
+              <td>{{ contenedor.fecha | date: 'yyyy-MM-dd h:mm' }}</td>
+              <td>{{ contenedor.fecha_vence }}</td>
+              <td class="text-end">{{ contenedor.vr_total | number }}</td>
+              <td class="text-end">{{ contenedor.vr_afectado | number }}</td>
+              <td class="text-end">{{ contenedor.vr_saldo | number }}</td>
+              <td class="text-end">{{ contenedor.vr_saldo_enmascarado | number }}</td>
+              <td>{{ contenedor.documento_fisico ? 'SI' : 'NO' }}</td>
+              <td>{{ contenedor.contenedor_movimiento_id }}</td>
+              <td>{{ contenedor.usuario_id }}</td>
+              <td>{{ contenedor.usuario_username }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

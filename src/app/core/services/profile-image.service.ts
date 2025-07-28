@@ -18,6 +18,26 @@ export class ProfileImageService {
   // Temporary image for preview (before saving to backend)
   private tempImage = signal<string | null>(null);
 
+  public profileImageThumbnail: Signal<string | null> = computed(() => {
+    // If there's a temporary image being previewed, use that
+    const tempImg = this.tempImage();
+    if (tempImg) {
+      return tempImg;
+    }
+
+    const user = this.user();
+    if (!user || !user.imagen_thumbnail) {
+      return null;
+    }
+
+    const imageUrl = user.imagen_thumbnail;
+    if (imageUrl.includes('defecto') || imageUrl.startsWith('data:')) {
+      return imageUrl;
+    }
+
+    return `${imageUrl}?t=${this.cacheBustingTimestamp()}`;
+  });
+
   // Computed signal for the profile image URL with cache busting
   public profileImageUrl: Signal<string | null> = computed(() => {
     // If there's a temporary image being previewed, use that
