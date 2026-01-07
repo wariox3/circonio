@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputComponent } from '@app/common/components/ui/form/input/input.component';
 import { LabelComponent } from '@app/common/components/ui/form/label/label.component';
@@ -9,7 +9,7 @@ import { AdvancedButtonComponent } from '@app/common/components/ui/advanced-butt
 import { selectIsLoading } from '../../store/selectors/auth.selector';
 import { AsyncPipe } from '@angular/common';
 import { environment } from '@environments/environment';
-import { NgxTurnstileModule } from 'ngx-turnstile';
+import { NgxTurnstileModule, NgxTurnstileComponent } from 'ngx-turnstile';
 
 @Component({
   selector: 'app-login',
@@ -28,9 +28,11 @@ import { NgxTurnstileModule } from 'ngx-turnstile';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class LoginComponent implements OnInit {
+  @ViewChild(NgxTurnstileComponent) turnstileComponent!: NgxTurnstileComponent;
   private store = inject(Store);
   public isLoading$ = this.store.select(selectIsLoading);
   public isProduction: boolean = environment.production;
+  public enableTurnstile: boolean = environment.enableTurnstile;
   public turnstileSiteKey: string = environment.turnstileSiteKey;
   public turnstileToken: string = '';
 
@@ -42,7 +44,7 @@ export default class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.isProduction) {
+    if (this.enableTurnstile) {
       this.formularioLogin.get('cf_turnstile_response')?.addValidators([Validators.required]);
     }
   }
@@ -53,7 +55,9 @@ export default class LoginComponent implements OnInit {
         credentials: {
           username: this.formularioLogin.value.username,
           password: this.formularioLogin.value.password,
-          cfTurnstileResponse: this.formularioLogin.value.cf_turnstile_response,
+          cfTurnstileResponse: this.enableTurnstile
+            ? this.formularioLogin.value.cf_turnstile_response
+            : undefined,
           proyecto: this.formularioLogin.value.proyecto,
         },
       })
