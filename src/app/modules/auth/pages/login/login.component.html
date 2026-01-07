@@ -50,7 +50,7 @@
         <span class="checkbox-label"> Recuerdame </span>
       </label>
 
-      @if (isProduction) {
+      @if (enableTurnstile) {
         <div class="flex justify-center">
           <ngx-turnstile
             [siteKey]="turnstileSiteKey"
